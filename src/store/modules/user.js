@@ -1,81 +1,39 @@
-import { login, logout, getInfo } from '@/api/login'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import { getAccessToken, getIdToken, parseIdToken } from '@/auth/utils'
+import auth from '@/auth/AuthService.js'
 
 const user = {
   state: {
-    token: getToken(),
+    access_token: getAccessToken(),
+    id_token: getIdToken(),
+    email: '',
     name: '',
-    avatar: '',
-    roles: []
+    avatar: ''
   },
 
   mutations: {
-    SET_TOKEN: (state, token) => {
-      state.token = token
+    SET_EMAIL: (state, email) => {
+      state.email = email
     },
     SET_NAME: (state, name) => {
       state.name = name
     },
-    SET_AVATAR: (state, avatar) => {
-      state.avatar = avatar
-    },
-    SET_ROLES: (state, roles) => {
-      state.roles = roles
+    SET_AVATAR: (state, picture) => {
+      state.avatar = picture
     }
   },
 
   actions: {
-    // 登录
-    Login({ commit }, userInfo) {
-      const username = userInfo.username.trim()
-      return new Promise((resolve, reject) => {
-        login(username, userInfo.password).then(response => {
-          const data = response.data
-          setToken(data.token)
-          commit('SET_TOKEN', data.token)
-          resolve()
-        }).catch(error => {
-          reject(error)
-        })
-      })
+    SET_PROFILE({ commit, state }) {
+      var info = parseIdToken(getIdToken())
+      commit('SET_EMAIL', info.email)
+      commit('SET_NAME', info.nickname)
+      commit('SET_AVATAR', info.picture)
     },
-
-    // 获取用户信息
-    GetInfo({ commit, state }) {
-      return new Promise((resolve, reject) => {
-        getInfo(state.token).then(response => {
-          const data = response.data
-          commit('SET_ROLES', data.roles)
-          commit('SET_NAME', data.name)
-          commit('SET_AVATAR', data.avatar)
-          resolve(response)
-        }).catch(error => {
-          reject(error)
-        })
-      })
+    LogIn({ commit, state }) {
+      auth.login()
     },
-
-    // 登出
     LogOut({ commit, state }) {
-      return new Promise((resolve, reject) => {
-        logout(state.token).then(() => {
-          commit('SET_TOKEN', '')
-          commit('SET_ROLES', [])
-          removeToken()
-          resolve()
-        }).catch(error => {
-          reject(error)
-        })
-      })
-    },
-
-    // 前端 登出
-    FedLogOut({ commit }) {
-      return new Promise(resolve => {
-        commit('SET_TOKEN', '')
-        removeToken()
-        resolve()
-      })
+      auth.logout()
     }
   }
 }
