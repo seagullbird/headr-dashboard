@@ -4,7 +4,7 @@ import { AUTH_CONFIG } from './auth0-variables'
 import EventEmitter from 'eventemitter3'
 import router from './../router'
 import store from '../store'
-import { setAccessToken, removeAccessToken, setIdToken, removeIdToken, getExpiresAt, setExpiresAt, removeExpiresAt } from '@/auth/utils'
+import { setAccessToken, removeAccessToken, setIdToken, removeIdToken, getExpiresAt, setExpiresAt, removeExpiresAt, parseIdToken } from '@/auth/utils'
 
 class AuthService {
   authenticated = this.isAuthenticated()
@@ -34,7 +34,11 @@ class AuthService {
     this.auth0.parseHash((err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.setSession(authResult)
-        router.replace('Dashboard')
+        if (parseIdToken(authResult.idToken)['http://headr/is_new_user']) {
+          router.replace('/new_site')
+        } else {
+          router.replace('Dashboard')
+        }
       } else if (err) {
         router.replace('Dashboard')
         console.log(err)

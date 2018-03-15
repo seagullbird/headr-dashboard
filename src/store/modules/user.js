@@ -34,6 +34,9 @@ const user = {
     },
     LogOut({ commit, state }) {
       auth.logout()
+    },
+    GenerateNewSite({ commit }, newSiteForm) {
+      console.log(newSiteForm.sitename)
     }
   }
 }
