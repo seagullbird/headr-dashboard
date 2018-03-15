@@ -4,9 +4,9 @@
       class="card-box new-site-form">
       <h3 class="title">Welcome, {{ user_name }}!</h3>
       <el-form-item prop="sitename">
-        <!-- <span class="svg-container svg-container_newsite">
-          <svg-icon icon-class="user" />
-        </span> -->
+        <span class="svg-container svg-container_newsite">
+          <svg-icon icon-class="tab" />
+        </span>
         <el-input name="sitename" type="text" v-model="newSiteForm.sitename" placeholder="enter a name for your brand new site" />
       </el-form-item>
       <el-form-item>
