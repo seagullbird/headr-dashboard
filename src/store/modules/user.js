@@ -1,3 +1,4 @@
+import { sitenameExists, newSite } from '@/api/site'
 import { getAccessToken, getIdToken, parseIdToken } from '@/auth/utils'
 import auth from '@/auth/AuthService.js'
 
@@ -7,7 +8,8 @@ const user = {
     id_token: getIdToken(),
     email: '',
     name: '',
-    avatar: ''
+    avatar: '',
+    site_id: 0
   },
 
   mutations: {
@@ -19,12 +21,16 @@ const user = {
     },
     SET_AVATAR: (state, picture) => {
       state.avatar = picture
+    },
+    SET_SITE_ID: (state, site_id) => {
+      state.site_id = site_id
     }
   },
 
   actions: {
     SET_PROFILE({ commit, state }) {
       var info = parseIdToken(getIdToken())
+      // TODO: set site_id from id_token
       commit('SET_EMAIL', info.email)
       commit('SET_NAME', info.nickname)
       commit('SET_AVATAR', info.picture)
@@ -35,8 +41,26 @@ const user = {
     LogOut({ commit, state }) {
       auth.logout()
     },
-    GenerateNewSite({ commit }, newSiteForm) {
-      console.log(newSiteForm.sitename)
+    CheckSitenameExists({ commit }, sitename) {
+      return new Promise((resolve, reject) => {
+        sitenameExists(sitename).then(res => {
+          const data = res.data
+          resolve(data.exists)
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
+    GenerateNewSite({ commit, state }, newSiteForm) {
+      var email = state.email
+      var sitename = newSiteForm.sitename
+      return new Promise((resolve, reject) => {
+        newSite(email, sitename).then(res => {
+          resolve(res.data)
+        }).catch(error => {
+          reject(error)
+        })
+      })
     }
   }
 }

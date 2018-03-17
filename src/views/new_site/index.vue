@@ -5,10 +5,14 @@
       <h3 class="title">Welcome, {{ user_name }}!</h3>
       <el-form-item prop="sitename">
         <span class="svg-container svg-container_newsite">
-          <svg-icon icon-class="tab" />
+          <i class="el-icon-news" style="color: white;"  v-show="!sitenameExists && !validating"></i>
+          <i class="el-icon-loading" style="color: white;" v-show="!sitenameExists && validating"></i>
+          <i class="el-icon-check" style="color: green;" v-show="sitenameExists === 'false'"></i>
+          <i class="el-icon-close" style="color: red;" v-show="sitenameExists === 'true'"></i>
         </span>
         <el-input name="sitename" type="text" v-model="newSiteForm.sitename" placeholder="enter a name for your brand new site" />
       </el-form-item>
+
       <el-form-item>
         <el-button type="primary" style="width:100%;" :loading="loading" @click.native.prevent="handleGenerate">
           Generate
@@ -19,6 +23,8 @@
 </template>
 
 <script>
+import { isvalidSitename } from '@/utils/validate'
+
 export default {
   name: 'new_site',
   computed: {
@@ -27,34 +33,51 @@ export default {
     }
   },
   data() {
-    const validateSitename = (rule, value, callback) => {
-      if (!value) {
-        callback(new Error('Invalid site name'))
+    var validateSitename = (rule, value, callback) => {
+      this.sitenameExists = ''
+      if (!isvalidSitename(value)) {
+        callback(new Error('Site name should include only [A-Za-z0-9_-], length 4~16'))
       } else {
-        callback()
+        this.validating = true
+        this.$store.dispatch('CheckSitenameExists', value).then(res => {
+          this.validating = false
+          if (res === false) {
+            this.sitenameExists = 'false'
+            callback()
+          } else {
+            this.sitenameExists = 'true'
+            callback(new Error('Site name already exists.'))
+          }
+        }).catch(() => {
+          this.validating = false
+          this.sitenameExists = 'true'
+          callback(new Error('Checking site name existence failed.'))
+        })
       }
-      // TODO: validate if sitename already exists using async method.
-      // TODO: add a loading icon for the validating.
     }
     return {
       newSiteForm: {
         sitename: ''
       },
       newSiteRules: {
-        sitename: [{ required: true, trigger: 'blur', validator: validateSitename }]
+        sitename: [{ trigger: 'blur', validator: validateSitename }]
       },
-      loading: false
+      loading: false,
+      validating: false,
+      sitenameExists: ''
     }
   },
   methods: {
     handleGenerate() {
       this.$refs.newSiteForm.validate(valid => {
-        if (valid) {
+        if (!valid) {
           this.loading = true
-          this.$store.dispatch('GenerateNewSite', this.newSiteForm).then(() => {
+          this.$store.dispatch('GenerateNewSite', this.newSiteForm).then(res => {
+            this.$store.commit('SET_SITE_ID', res.site_id)
             this.loading = false
             this.$router.push({ path: '/' })
           }).catch(() => {
+            // TODO: Deal with error
             this.loading = false
           })
         } else {
