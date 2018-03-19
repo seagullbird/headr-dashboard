@@ -15,3 +15,4 @@ package-lock.json
 *.sln
 
 config/dev.env.js
+src/auth/auth0-variables.js
