@@ -3,12 +3,12 @@
     <el-container>
       <el-aside>
         <el-input placeholder="Filter keyword" v-model="filterText" style="margin-bottom:30px;"></el-input>
-        <el-tree class="filter-tree" :data="data2" :props="defaultProps" default-expand-all :filter-node-method="filterNode" ref="tree2"></el-tree>
+        <el-tree class="filter-tree" :data="posts_menu" :props="defaultProps" default-expand-all :filter-node-method="filterNode" ref="tree2" @node-click="handleNodeClick"></el-tree>
       </el-aside>
       <el-main>
         <el-tabs tab-position="right">
           <el-tab-pane label="Edit">
-            <MarkdownEditor id="simplemde"></MarkdownEditor>
+            <MarkdownEditor id="simplemde" :value="selected_post.content"></MarkdownEditor>
           </el-tab-pane>
           <el-tab-pane label="Config">
             <el-form ref="form" :model="form" label-width="80px">
@@ -57,6 +57,15 @@
     watch: {
       filterText(val) {
         this.$refs.tree2.filter(val)
+      },
+      posts(val) {
+        this.posts_menu = []
+        for (let i = 0; i < val.length; i++) {
+          this.posts_menu.push({
+            id: val[i].ID,
+            label: val[i].title
+          })
+        }
       }
     },
 
@@ -84,6 +93,20 @@
         }
         this.form.tagInputVisible = false
         this.form.tagInputValue = ''
+      },
+      handleNodeClick(data) {
+        for (let i = 0; i < this.posts.length; i++) {
+          if (this.posts[i].ID === data.id) {
+            this.selected_post = this.posts[i]
+            break
+          }
+        }
+        this.form.title = this.selected_post.title
+        this.form.draft = this.selected_post.draft
+        this.form.tags = JSON.parse(this.selected_post.tags)
+      },
+      getPosts() {
+        this.$store.dispatch('GetAllPosts')
       }
     },
     data() {
@@ -96,26 +119,22 @@
           tagtagInputValue: ''
         },
         title: '',
+        posts_menu: [],
+        selected_post: {},
         tabPosition: 'top',
         filterText: '',
-        data2: [
-          {
-            id: 1,
-            label: 'Level one 1'
-          },
-          {
-            id: 2,
-            label: 'Level one 2'
-          },
-          {
-            id: 3,
-            label: 'Level one 3'
-          }
-        ],
         defaultProps: {
           children: 'children',
           label: 'label'
         }
+      }
+    },
+    mounted() {
+      this.getPosts()
+    },
+    computed: {
+      posts() {
+        return this.$store.getters.posts
       }
     }
   }

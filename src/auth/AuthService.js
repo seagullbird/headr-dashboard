@@ -35,12 +35,8 @@ class AuthService {
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.setSession(authResult)
         store.dispatch('GetSiteID').then(res => {
-          if (res === 0) {
-            router.replace('/new_site')
-          } else {
-            store.commit('SET_SITE_ID', res)
-            router.replace('Dashboard')
-          }
+          store.commit('SET_SITE_ID', res)
+          router.replace('Dashboard')
         }).catch(error => {
             console.log(error)
         })

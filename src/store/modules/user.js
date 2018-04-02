@@ -9,7 +9,7 @@ const user = {
     email: '',
     name: '',
     avatar: '',
-    site_id: 0
+    site_id: localStorage.getItem('site_id')
   },
 
   mutations: {
@@ -24,11 +24,12 @@ const user = {
     },
     SET_SITE_ID: (state, site_id) => {
       state.site_id = site_id
+      localStorage.setItem('site_id', site_id)
     }
   },
 
   actions: {
-    SET_PROFILE({ commit, state }) {
+    SetProfile({ commit, state }) {
       var info = parseIdToken(getIdToken())
       // TODO: set site_id from id_token
       commit('SET_EMAIL', info.email)
@@ -40,6 +41,7 @@ const user = {
     },
     LogOut({ commit, state }) {
       auth.logout()
+      localStorage.removeItem('site_id')
     },
     CheckSitenameExists({ commit }, sitename) {
       return new Promise((resolve, reject) => {
