@@ -70,7 +70,7 @@ export default {
   methods: {
     handleGenerate() {
       this.$refs.newSiteForm.validate(valid => {
-        if (!valid) {
+        if (valid) {
           this.loading = true
           this.$store.dispatch('GenerateNewSite', this.newSiteForm).then(res => {
             this.$store.commit('SET_SITE_ID', res.site_id)
