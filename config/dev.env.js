@@ -4,6 +4,7 @@ const prodEnv = require('./prod.env')
 
 module.exports = merge(prodEnv, {
   NODE_ENV: '"development"',
-  BASE_API: '"https://67125b45-891c-4939-bc5c-78e36ffd16d0.mock.pstmn.io"',
+  // Minikube apigateway Service address
+  BASE_API: '"http://192.168.96.151:30308"',
   BASE_URL: '"http://localhost:9528"'
 })

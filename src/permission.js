@@ -11,7 +11,9 @@ router.beforeEach((to, from, next) => {
     if (to.path === '/login') {
       next({ path: '/' })
     } else {
-      if (store.getters.email.length === 0) {
+      if (store.getters.site_id === 0 && to.path !== '/new_site') {
+        next({ path: '/new_site' })
+      } else if (store.getters.email.length === 0) {
         store.dispatch('SET_PROFILE').then(res => {
           next()
         })

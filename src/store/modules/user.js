@@ -1,4 +1,4 @@
-import { sitenameExists, newSite } from '@/api/site'
+import { sitenameExists, newSite, getSiteID } from '@/api/site'
 import { getAccessToken, getIdToken, parseIdToken } from '@/auth/utils'
 import auth from '@/auth/AuthService.js'
 
@@ -57,6 +57,15 @@ const user = {
       return new Promise((resolve, reject) => {
         newSite(email, sitename).then(res => {
           resolve(res.data)
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
+    GetSiteID({ commit, state }) {
+      return new Promise((resolve, reject) => {
+        getSiteID().then(res => {
+          resolve(res.data.site_id)
         }).catch(error => {
           reject(error)
         })

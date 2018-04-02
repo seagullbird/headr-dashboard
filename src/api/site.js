@@ -1,22 +1,28 @@
 import request from '@/utils/request'
 
-export function sitenameExists(sitename) {
+export function sitenameExists(site_name) {
   return request({
-    url: '/sitemgr/sitename-exists',
+    url: '/sitemgr/is-sitename-exists',
     method: 'post',
     data: {
-      sitename
+      site_name
     }
   })
 }
 
-export function newSite(email, sitename) {
+export function newSite(email, site_name) {
   return request({
-    url: '/sitemgr/create-new-site',
+    url: '/sitemgr/sites/',
     method: 'post',
     data: {
-      email,
-      sitename
+      site_name
     }
+  })
+}
+
+export function getSiteID() {
+  return request({
+    url: '/sitemgr/site-id/',
+    method: 'get'
   })
 }

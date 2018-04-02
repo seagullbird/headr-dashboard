@@ -2,6 +2,7 @@
   <div class="dashboard-container">
     <div class="dashboard-text">name:{{name}}</div>
     <div class="dashboard-text">email:{{email}}</div>
+    <div class="dashboard-text">site_id:{{site_id}}</div>
     <!-- <div class="dashboard-text">roles:<span v-for='role in roles' :key='role'>{{role}}</span></div> -->
   </div>
 </template>
@@ -14,7 +15,8 @@ export default {
     ...mapGetters([
       // 'roles',
       'name',
-      'email'
+      'email',
+      'site_id'
     ])
   }
 }

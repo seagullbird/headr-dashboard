@@ -34,11 +34,16 @@ class AuthService {
     this.auth0.parseHash((err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.setSession(authResult)
-        if (parseIdToken(authResult.idToken)['http://headr/is_new_user']) {
-          router.replace('/new_site')
-        } else {
-          router.replace('Dashboard')
-        }
+        store.dispatch('GetSiteID').then(res => {
+          if (res === 0) {
+            router.replace('/new_site')
+          } else {
+            store.commit('SET_SITE_ID', res)
+            router.replace('Dashboard')
+          }
+        }).catch(error => {
+            console.log(error)
+        })
       } else if (err) {
         router.replace('Dashboard')
         console.log(err)
