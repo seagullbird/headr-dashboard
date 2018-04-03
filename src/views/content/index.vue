@@ -3,7 +3,15 @@
     <el-container>
       <el-aside>
         <el-input placeholder="Filter keyword" v-model="filterText" style="margin-bottom:30px;"></el-input>
-        <el-tree class="filter-tree" :data="posts_menu" :props="defaultProps" default-expand-all :filter-node-method="filterNode" ref="tree2" @node-click="handleNodeClick"></el-tree>
+        <el-tree
+          class="filter-tree"
+          :data="posts_menu"
+          :props="defaultProps"
+          node-key="id"
+          :filter-node-method="filterNode"
+          ref="tree2"
+          @node-click="handleNodeClick">
+        </el-tree>
       </el-aside>
       <el-main>
         <el-tabs tab-position="right">
@@ -107,6 +115,10 @@
       },
       getPosts() {
         this.$store.dispatch('GetAllPosts')
+      },
+      deletePost(node, data) {
+        console.log(node)
+        console.log(data)
       }
     },
     data() {

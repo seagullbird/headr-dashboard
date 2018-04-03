@@ -18,6 +18,11 @@
           Generate
         </el-button>
       </el-form-item>
+      <el-form-item>
+        <el-button type="danger" style="width:100%;" :loading="loading" @click.native.prevent="handleLogOut">
+          Log Out
+        </el-button>
+      </el-form-item>
     </el-form>
   </div>
 </template>
@@ -83,6 +88,11 @@ export default {
         } else {
           return false
         }
+      })
+    },
+    handleLogOut() {
+      this.$store.dispatch('LogOut').then(() => {
+        location.reload() // 为了重新实例化vue-router对象 避免bug
       })
     }
   }
