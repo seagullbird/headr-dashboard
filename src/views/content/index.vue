@@ -2,6 +2,7 @@
   <div class="app-container">
     <el-container>
       <el-aside>
+        <el-button type="primary" style="margin-bottom:15px; width: 100%;" @click="handleNewPost">New Post</el-button>
         <el-input placeholder="Filter keyword" v-model="filterText" style="margin-bottom:30px;"></el-input>
         <el-tree
           class="filter-tree"
@@ -23,6 +24,13 @@
               <el-form-item label="Title">
                 <el-input v-model="form.title"></el-input>
               </el-form-item>
+              <el-form-item label="Summary">
+                <el-input
+                  type="textarea"
+                  :autosize="{ minRows: 2, maxRows: 4}"
+                  v-model="form.summary">
+                </el-input>
+              </el-form-item>
               <el-form-item label="Draft">
                 <el-switch v-model="form.draft"></el-switch>
               </el-form-item>
@@ -32,7 +40,7 @@
                   v-for="tag in form.tags"
                   closable
                   :disable-transitions="false"
-                  @close="handleClose(tag)">
+                  @close="handleTagClose(tag)">
                   {{tag}}
                 </el-tag>
                 <el-input
@@ -83,7 +91,7 @@
         return data.label.indexOf(value) !== -1
       },
 
-      handleClose(tag) {
+      handleTagClose(tag) {
         this.form.tags.splice(this.form.tags.indexOf(tag), 1)
       },
 
@@ -111,6 +119,7 @@
         }
         this.form.title = this.selected_post.title
         this.form.draft = this.selected_post.draft
+        this.form.summary = this.selected_post.summary
         this.form.tags = JSON.parse(this.selected_post.tags)
       },
       getPosts() {
@@ -119,6 +128,9 @@
       deletePost(node, data) {
         console.log(node)
         console.log(data)
+      },
+      handleNewPost() {
+        this.$router.push('/content/new_post')
       }
     },
     data() {
@@ -127,6 +139,7 @@
           title: '',
           draft: true,
           tags: ['1', '2'],
+          summary: '',
           tagInputVisible: false,
           tagtagInputValue: ''
         },

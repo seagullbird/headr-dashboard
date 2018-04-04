@@ -18,7 +18,7 @@ export default {
   components: { JsonEditor },
   data() {
     return {
-      value: ''
+      value: 'loading...'
     }
   },
   mounted() {

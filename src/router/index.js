@@ -53,6 +53,18 @@ export const constantRouterMap = [
   },
 
   {
+    path: '/content',
+    component: Layout,
+    hidden: true,
+    children: [{
+      name: 'NewPost',
+      path: 'new_post',
+      component: () => import('@/views/content/new_post'),
+      meta: { title: 'New Post' }
+    }]
+  },
+
+  {
     path: '/settings',
     component: Layout,
     redirect: '/settings/theme',
