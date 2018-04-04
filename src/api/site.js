@@ -26,3 +26,21 @@ export function getSiteID() {
     method: 'get'
   })
 }
+
+export function getSiteConfig(site_id) {
+  return request({
+    url: '/sitemgr/sites/config/' + site_id,
+    method: 'get'
+  })
+}
+
+export function updateSiteConfig(site_id, config) {
+  console.log(config)
+  return request({
+    url: 'sitemgr/sites/config/' + site_id,
+    method: 'put',
+    data: {
+      config
+    }
+  })
+}

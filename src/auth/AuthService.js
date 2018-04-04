@@ -39,6 +39,7 @@ class AuthService {
           router.replace('Dashboard')
         }).catch(error => {
             console.log(error)
+            this.logout()
         })
       } else if (err) {
         router.replace('Dashboard')

@@ -68,7 +68,7 @@ export const constantRouterMap = [
       {
         path: 'site',
         name: 'Site',
-        component: () => import('@/views/tree/index'),
+        component: () => import('@/views/site_settings/advanced'),
         meta: { title: 'Site', icon: 'tree' }
       }
     ]
