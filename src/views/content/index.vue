@@ -2,17 +2,21 @@
   <div class="app-container">
     <el-container>
       <el-aside>
-        <el-button type="primary" style="margin-bottom:15px; width: 100%;" @click="handleNewPost">New Post</el-button>
-        <el-input placeholder="Filter keyword" v-model="filterText" style="margin-bottom:30px;"></el-input>
-        <el-tree
-          class="filter-tree"
-          :data="posts_menu"
-          :props="defaultProps"
-          node-key="id"
-          :filter-node-method="filterNode"
-          ref="tree2"
-          @node-click="handleNodeClick">
-        </el-tree>
+        <el-button type="primary" style="margin-bottom:20px; width: 100%;" @click="handleNewPost">New Post</el-button>
+        <el-input placeholder="Search posts..." v-model="filterText" style="margin-bottom:15px;"></el-input>
+        <div class="post-list">
+          <div class="post-item" v-for="post in posts_menu" :key="post.id" @click="handlePostClick(post)">
+              {{ post.label }}
+            <span>
+              <el-button
+                type="text"
+                size="mini"
+                @click="deletePost(post.id)">
+                Delete
+              </el-button>
+            </span>
+          </div>
+        </div>
       </el-aside>
       <el-main>
         <el-tabs tab-position="right">
@@ -72,25 +76,28 @@
     components: { MarkdownEditor },
     watch: {
       filterText(val) {
-        this.$refs.tree2.filter(val)
+        if (!val) {
+          this.posts_menu = this._menu_origin
+          return
+        }
+        this.posts_menu = this._menu_origin.filter(post => {
+          if (!val) return true
+          return post.label.indexOf(val) !== -1
+        })
       },
       posts(val) {
-        this.posts_menu = []
+        this._menu_origin = []
         for (let i = 0; i < val.length; i++) {
-          this.posts_menu.push({
+          this._menu_origin.push({
             id: val[i].ID,
             label: val[i].title
           })
         }
+        this.posts_menu = this._menu_origin
       }
     },
 
     methods: {
-      filterNode(value, data) {
-        if (!value) return true
-        return data.label.indexOf(value) !== -1
-      },
-
       handleTagClose(tag) {
         this.form.tags.splice(this.form.tags.indexOf(tag), 1)
       },
@@ -110,7 +117,7 @@
         this.form.tagInputVisible = false
         this.form.tagInputValue = ''
       },
-      handleNodeClick(data) {
+      handlePostClick(data) {
         for (let i = 0; i < this.posts.length; i++) {
           if (this.posts[i].ID === data.id) {
             this.selected_post = this.posts[i]
@@ -125,9 +132,8 @@
       getPosts() {
         this.$store.dispatch('GetAllPosts')
       },
-      deletePost(node, data) {
-        console.log(node)
-        console.log(data)
+      deletePost(post_id) {
+        console.log(post_id)
       },
       handleNewPost() {
         this.$router.push('/content/new_post')
@@ -144,7 +150,10 @@
           tagtagInputValue: ''
         },
         title: '',
+
         posts_menu: [],
+        _menu_origin: [],
+
         selected_post: {},
         tabPosition: 'top',
         filterText: '',
@@ -189,5 +198,24 @@
     float: right;
     margin-top: 5px;
     margin-right: 10px;
+  }
+  .post-list {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  .post-item {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 14px;
+    padding-left: 5px;
+    padding-right: 5px;
+    cursor: pointer;
+    font-family: "Source Sans Pro", "Helvetica Neue", Arial, sans-serif;
+    border-radius: 3px;
+  }
+  .post-item:hover {
+    background-color: #d5d5d5;
   }
 </style>
