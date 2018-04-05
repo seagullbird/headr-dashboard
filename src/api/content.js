@@ -35,3 +35,19 @@ export function deletePost(post_id) {
     method: 'delete'
   })
 }
+
+export function patchPost(post) {
+  return request({
+    url: '/contentmgr/posts/' + post.id,
+    method: 'patch',
+    data: {
+      title: post.title,
+      summary: post.summary,
+      content: post.content,
+      tags: post.tags,
+      date: post.date,
+      site_id: post.site_id,
+      draft: post.draft
+    }
+  })
+}

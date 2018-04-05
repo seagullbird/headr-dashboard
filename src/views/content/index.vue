@@ -21,8 +21,8 @@
             <MarkdownEditor id="simplemde" v-model="selected_post.content"></MarkdownEditor>
           </el-tab-pane>
           <el-tab-pane label="Config">
-            <el-form ref="form" :model="form" label-width="80px">
-              <el-form-item label="Title">
+            <el-form :rules="formRules" ref="form" :model="form" label-width="80px">
+              <el-form-item label="Title" prop="title">
                 <el-input v-model="form.title"></el-input>
               </el-form-item>
               <el-form-item label="Summary">
@@ -34,6 +34,12 @@
               </el-form-item>
               <el-form-item label="Draft">
                 <el-switch v-model="form.draft"></el-switch>
+              </el-form-item>
+              <el-form-item label="Date" prop="date">
+                <el-date-picker
+                  v-model="form.date"
+                  type="datetime">
+                </el-date-picker>
               </el-form-item>
               <el-form-item label="Tags">
                 <el-tag
@@ -69,6 +75,8 @@
 </template>
 <script>
   import MarkdownEditor from '@/components/MarkdownEditor/index.vue'
+  import Moment from 'moment'
+
   export default {
     components: { MarkdownEditor },
     watch: {
@@ -118,9 +126,11 @@
             break
           }
         }
+        console.log(this.selected_post.draft)
         this.form.title = this.selected_post.title
         this.form.draft = this.selected_post.draft
         this.form.summary = this.selected_post.summary
+        this.form.date = this.selected_post.date
         this.form.tags = JSON.parse(this.selected_post.tags)
       },
       getPosts() {
@@ -148,7 +158,24 @@
         })
       },
       handlePublish() {
-        console.log(this.selected_post.ID)
+        this.$refs.form.validate(valid => {
+          if (valid) {
+            this.$store.dispatch('PatchPost', {
+              id: this.selected_post.ID,
+              title: this.form.title,
+              summary: this.form.summary,
+              content: this.form.content,
+              tags: JSON.stringify(this.form.tags),
+              date: new Moment(this.form.date).format(),
+              draft: this.form.draft,
+              site_id: Number(this.$store.getters.site_id)
+            }).then(res => {
+              console.log(res)
+            }).catch(error => {
+              console.log(error)
+            })
+          }
+        })
       },
       handleNewPost() {
         this.$router.push('/content/new_post')
@@ -161,10 +188,14 @@
           draft: true,
           tags: ['1', '2'],
           summary: '',
+          date: '',
           tagInputVisible: false,
           tagtagInputValue: ''
         },
-        title: '',
+        formRules: {
+          title: [{ required: true, trigger: 'blur', message: 'Please input a title' }],
+          date: [{ required: true, trigger: 'blur', message: 'Please input publish date and time' }]
+        },
         posts_menu: [],
         selected_post: {},
         tabPosition: 'top',

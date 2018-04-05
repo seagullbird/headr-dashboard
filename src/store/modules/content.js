@@ -1,4 +1,4 @@
-import { getAllPosts, getPost, newPost, deletePost } from '@/api/content'
+import { getAllPosts, getPost, newPost, deletePost, patchPost } from '@/api/content'
 
 const content = {
   state: {
@@ -49,6 +49,16 @@ const content = {
     DeletePost({ commit, state }, post_id) {
       return new Promise((resolve, reject) => {
         deletePost(post_id).then(res => {
+          resolve(res)
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
+
+    PatchPost({ commit, state }, post) {
+      return new Promise((resolve, reject) => {
+        patchPost(post).then(res => {
           resolve(res)
         }).catch(error => {
           reject(error)
