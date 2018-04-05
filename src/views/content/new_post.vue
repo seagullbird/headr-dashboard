@@ -160,9 +160,16 @@
             date: new Moment(this.publishForm.date).format()
           }
         }).then(res => {
-          console.log(res)
+          if (res.status !== 200) {
+            this.$message.error(res.data.error)
+          } else {
+            this.$message({
+              type: 'success',
+              message: 'Successfully published!'
+            })
+          }
         }).catch(error => {
-          console.log(error)
+          this.$message.error(error)
         })
       }
     }

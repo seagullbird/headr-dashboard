@@ -28,3 +28,10 @@ export function newPost(site_id, post) {
     }
   })
 }
+
+export function deletePost(post_id) {
+  return request({
+    url: '/contentmgr/posts/' + post_id,
+    method: 'delete'
+  })
+}

@@ -57,8 +57,8 @@
                 <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
               </el-form-item>
                 <el-form-item>
-                  <el-button type="primary" icon="el-icon-upload">Publish</el-button>
-                  <el-button type="danger" icon="el-icon-delete">Delete</el-button>
+                  <el-button type="primary" icon="el-icon-upload" @click="handlePublish">Publish</el-button>
+                  <el-button type="danger" icon="el-icon-delete" @click="handleDeletePost">Delete</el-button>
                 </el-form-item>
             </el-form>
           </el-tab-pane>
@@ -126,9 +126,29 @@
       getPosts() {
         this.$store.dispatch('GetAllPosts')
       },
-      deletePost(node, data) {
-        console.log(node)
-        console.log(data)
+      handleDeletePost() {
+        // console.log(this.selected_post.ID)
+        this.$confirm('Delete this post permanently?', 'Warning', {
+          confirmButtonText: 'OK',
+          cancelButtonText: 'Cancel',
+          type: 'warning'
+        }).then(() => {
+          this.$store.dispatch('DeletePost', this.selected_post.ID).then(res => {
+            if (res.data !== {}) {
+              this.$message({
+                type: 'success',
+                message: 'Successfully deleted!'
+              })
+            } else {
+              this.$message.error(res.data.error)
+            }
+          }).catch(error => {
+            this.$message.error(error)
+          })
+        })
+      },
+      handlePublish() {
+        console.log(this.selected_post.ID)
       },
       handleNewPost() {
         this.$router.push('/content/new_post')
