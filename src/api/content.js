@@ -13,3 +13,18 @@ export function getPost(post_id) {
     method: 'get'
   })
 }
+
+export function newPost(site_id, post) {
+  return request({
+    url: '/contentmgr/posts/',
+    method: 'post',
+    data: {
+      site_id: site_id,
+      title: post.title,
+      date: post.date,
+      content: post.content,
+      summary: post.summary,
+      tags: post.tags
+    }
+  })
+}

@@ -3,19 +3,25 @@
     <el-container>
       <el-main>
         <el-card>
-          <el-form  style="margin-bottom:20px" label-width="80px">
-            <el-form-item label="Title">
-              <el-input clearable></el-input>
+          <el-form
+            :model="contentForm"
+            :rules="contentFormRules"
+            ref="contentForm"
+            style="margin-bottom:20px"
+            label-width="80px"
+            @submit.native.prevent>
+            <el-form-item label="Title" prop="title">
+              <el-input clearable v-model="contentForm.title"></el-input>
             </el-form-item>
             <el-form-item label="Summary">
               <el-input
                 type="textarea"
                 :autosize="{ minRows: 2, maxRows: 4}"
-                v-model="form.summary">
+                v-model="contentForm.summary">
               </el-input>
             </el-form-item>
           </el-form>
-          <MarkdownEditor id="simplemde" placeholder="input content here..."></MarkdownEditor>
+          <MarkdownEditor id="simplemde" placeholder="input content here..." v-model="contentForm.content"></MarkdownEditor>
         </el-card>
     </el-main>
     <el-aside>
@@ -24,18 +30,23 @@
           <i class="el-icon-upload2"></i>
           <span>Publish</span>
         </div>
-        <el-form :model="form" label-width="40px">
+        <el-form
+          :model="publishForm"
+          :rules="publishFormRules"
+          ref="publishForm"
+          label-width="50px"
+          @submit.native.prevent>
           <el-form-item label="Draft">
-            <el-switch v-model="form.draft"></el-switch>
+            <el-switch v-model="publishForm.draft"></el-switch>
           </el-form-item>
-          <el-form-item label="Date">
+          <el-form-item label="Date" prop="date">
             <el-date-picker
-              v-model="form.date"
+              v-model="publishForm.date"
               type="datetime">
             </el-date-picker>
           </el-form-item>
           <el-form-item style="margin-bottom:0; text-align:right;">
-            <el-button type="primary">Publish</el-button>
+            <el-button type="primary" @click="handlePublish">Publish</el-button>
             <el-button>Save</el-button>
           </el-form-item>
         </el-form>
@@ -45,11 +56,17 @@
             <i class="el-icon-plus"></i>
             <span>Metadata</span>
         </div>
-        <el-form label-position="top" label-width="40px">
+        <el-form
+          :model="metadataForm"
+          :rules="metadataFormRules"
+          ref="metadataForm"
+          label-position="top"
+          label-width="40px"
+          @submit.native.prevent>
           <el-form-item label="Tags">
             <el-tag
               :key="tag"
-              v-for="tag in form.tags"
+              v-for="tag in metadataForm.tags"
               closable
               :disable-transitions="false"
               @close="handleTagClose(tag)">
@@ -57,8 +74,8 @@
             </el-tag>
             <el-input
               class="input-new-tag"
-              v-if="form.tagInputVisible"
-              v-model="form.tagInputValue"
+              v-if="metadataForm.tagInputVisible"
+              v-model="metadataForm.tagInputValue"
               ref="saveTagInput"
               size="small"
               @keyup.enter.native="handleTagInputConfirm"
@@ -74,19 +91,33 @@
 </template>
 <script>
   import MarkdownEditor from '@/components/MarkdownEditor/index.vue'
+  import Moment from 'moment'
 
   export default {
     components: { MarkdownEditor },
     data() {
       return {
-        form: {
-          draft: true,
-          date: '',
-          tags: ['1', '2'],
+        contentForm: {
+          title: '',
           summary: '',
+          content: ''
+        },
+        contentFormRules: {
+          title: [{ required: true, trigger: 'blur', message: 'Please input a title' }]
+        },
+        publishForm: {
+          draft: true,
+          date: ''
+        },
+        publishFormRules: {
+          date: [{ required: true, trigger: 'blur', message: 'Please input publish date and time' }]
+        },
+        metadataForm: {
+          tags: [],
           tagInputVisible: false,
           tagtagInputValue: ''
-        }
+        },
+        metadataFormRules: {}
       }
     },
     methods: {
@@ -94,18 +125,45 @@
         this.form.tags.splice(this.form.tags.indexOf(tag), 1)
       },
       showTagInput() {
-        this.form.tagInputVisible = true
+        this.metadataForm.tagInputVisible = true
         this.$nextTick(_ => {
           this.$refs.saveTagInput.$refs.input.focus()
         })
       },
       handleTagInputConfirm() {
-        const tagInputValue = this.form.tagInputValue
+        const tagInputValue = this.metadataForm.tagInputValue
         if (tagInputValue) {
-          this.form.tags.push(tagInputValue)
+          this.metadataForm.tags.push(tagInputValue)
         }
-        this.form.tagInputVisible = false
-        this.form.tagInputValue = ''
+        this.metadataForm.tagInputVisible = false
+        this.metadataForm.tagInputValue = ''
+      },
+      handlePublish() {
+        var allValid = false
+        this.$refs.contentForm.validate(valid => {
+          if (valid) {
+            this.$refs.publishForm.validate(valid => {
+              if (valid) allValid = true
+            })
+          }
+        })
+        if (!allValid) return
+
+        this.$store.dispatch('NewPost', {
+          site_id: Number(this.$store.getters.site_id),
+          post: {
+            title: this.contentForm.title,
+            summary: this.contentForm.summary,
+            content: this.contentForm.content,
+            tags: JSON.stringify(this.metadataForm.tags),
+            draft: this.publishForm.draft,
+            date: new Moment(this.publishForm.date).format()
+          }
+        }).then(res => {
+          console.log(res)
+        }).catch(error => {
+          console.log(error)
+        })
       }
     }
   }

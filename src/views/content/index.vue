@@ -21,7 +21,7 @@
       <el-main>
         <el-tabs tab-position="right">
           <el-tab-pane label="Edit">
-            <MarkdownEditor id="simplemde" :value="selected_post.content"></MarkdownEditor>
+            <MarkdownEditor id="simplemde" v-model="selected_post.content"></MarkdownEditor>
           </el-tab-pane>
           <el-tab-pane label="Config">
             <el-form ref="form" :model="form" label-width="80px">

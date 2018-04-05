@@ -1,7 +1,13 @@
 <template>
   <div class="new-site-container">
-    <el-form :model="newSiteForm" :rules="newSiteRules" ref="newSiteForm" label-position="left" label-width="0px"
-      class="card-box new-site-form">
+    <el-form
+      :model="newSiteForm"
+      :rules="newSiteRules"
+      ref="newSiteForm"
+      label-position="left"
+      label-width="0px"
+      class="card-box new-site-form"
+      @submit.native.prevent>
       <h3 class="title">Welcome, {{ user_name }}!</h3>
       <el-form-item prop="sitename">
         <span class="svg-container svg-container_newsite">

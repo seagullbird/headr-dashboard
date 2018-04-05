@@ -1,4 +1,4 @@
-import { getAllPosts, getPost } from '@/api/content'
+import { getAllPosts, getPost, newPost } from '@/api/content'
 
 const content = {
   state: {
@@ -32,6 +32,16 @@ const content = {
           }
         }).catch(error => {
           reject(error)
+        })
+      })
+    },
+
+    NewPost({ commit, state }, params) {
+      return new Promise((resolve, reject) => {
+        newPost(params.site_id, params.post).then(res => {
+          resolve(res)
+        }).catch(error => {
+          console.log(error)
         })
       })
     }
