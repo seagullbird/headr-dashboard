@@ -25,7 +25,7 @@
         </el-button>
       </el-form-item>
       <el-form-item>
-        <el-button type="danger" style="width:100%;" :loading="loading" @click.native.prevent="handleLogOut">
+        <el-button type="danger" style="width:100%;" @click.native.prevent="handleLogOut">
           Log Out
         </el-button>
       </el-form-item>

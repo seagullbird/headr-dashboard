@@ -11,7 +11,7 @@
           node-key="id"
           :filter-node-method="filterNode"
           ref="postList"
-          empty-text="loading..."
+          :empty-text="tree_empty_text"
           @node-click="handleNodeClick">
         </el-tree>
       </el-aside>
@@ -82,15 +82,6 @@
     watch: {
       filterText(val) {
         this.$refs.postList.filter(val)
-      },
-      posts(val) {
-        this.posts_menu = []
-        for (let i = 0; i < val.length; i++) {
-          this.posts_menu.push({
-            id: val[i].ID,
-            label: val[i].title
-          })
-        }
       }
     },
 
@@ -126,7 +117,6 @@
             break
           }
         }
-        console.log(this.selected_post.draft)
         this.form.title = this.selected_post.title
         this.form.draft = this.selected_post.draft
         this.form.summary = this.selected_post.summary
@@ -134,10 +124,27 @@
         this.form.tags = JSON.parse(this.selected_post.tags)
       },
       getPosts() {
-        this.$store.dispatch('GetAllPosts')
+        this.$store.dispatch('GetAllPosts').then(post_ids => {
+          if (post_ids.length === 0) {
+            this.tree_empty_text = 'No posts yet'
+            return
+          }
+          for (let i = 0; i < post_ids.length; i++) {
+            this.$store.dispatch('GetPost', post_ids[i]).then(post => {
+              this.posts.push(post)
+              this.posts_menu.push({
+                id: post.ID,
+                label: post.title
+              })
+            }).catch(error => {
+              this.$message.error(error)
+            })
+          }
+        }).catch(error => {
+          this.$message.error(error)
+        })
       },
       handleDeletePost() {
-        // console.log(this.selected_post.ID)
         this.$confirm('Delete this post permanently?', 'Warning', {
           confirmButtonText: 'OK',
           cancelButtonText: 'Cancel',
@@ -197,6 +204,9 @@
           date: [{ required: true, trigger: 'blur', message: 'Please input publish date and time' }]
         },
         posts_menu: [],
+        post_ids: [],
+        posts: [],
+        tree_empty_text: 'loading...',
         selected_post: {},
         tabPosition: 'top',
         filterText: '',
@@ -208,11 +218,6 @@
     },
     mounted() {
       this.getPosts()
-    },
-    computed: {
-      posts() {
-        return this.$store.getters.posts
-      }
     }
   }
 </script>
