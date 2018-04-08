@@ -47,7 +47,7 @@
           </el-form-item>
           <el-form-item style="margin-bottom:0; text-align:right;">
             <el-button type="primary" @click="handlePublish">Publish</el-button>
-            <el-button>Save</el-button>
+            <!-- <el-button>Save</el-button> -->
           </el-form-item>
         </el-form>
       </el-card>
