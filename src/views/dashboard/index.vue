@@ -3,7 +3,9 @@
     <div class="dashboard-text">name:{{name}}</div>
     <div class="dashboard-text">email:{{email}}</div>
     <div class="dashboard-text">site_id:{{site_id}}</div>
-    <a :href="'https://site.headr.io/' + site_id">Visit My Site</a>
+    <a :href="'https://site.headr.io/' + site_id" target="_blank">
+      <el-button type="success" icon="el-icon-news">Open My Site</el-button>
+    </a>
   </div>
 </template>
 
