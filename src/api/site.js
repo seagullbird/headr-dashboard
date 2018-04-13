@@ -35,7 +35,6 @@ export function getSiteConfig(site_id) {
 }
 
 export function updateSiteConfig(site_id, config) {
-  console.log(config)
   return request({
     url: 'sitemgr/sites/config/' + site_id,
     method: 'put',

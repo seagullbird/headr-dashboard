@@ -177,9 +177,12 @@
               draft: this.form.draft,
               site_id: Number(this.$store.getters.site_id)
             }).then(res => {
-              console.log(res)
+              this.$message({
+                type: 'success',
+                message: 'Successfully published!'
+              })
             }).catch(error => {
-              console.log(error)
+              this.$message.error(error)
             })
           }
         })

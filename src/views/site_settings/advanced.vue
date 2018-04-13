@@ -25,15 +25,18 @@ export default {
     this.$store.dispatch('GetSiteConfig', this.$store.getters.site_id).then(res => {
       this.value = JSON.parse(res)
     }).catch(error => {
-      console.log(error)
+      this.$message.error(error)
     })
   },
   methods: {
     handleSaveConfig() {
       this.$store.dispatch('UpdateSiteConfig', { site_id: this.$store.getters.site_id, config: this.value }).then(res => {
-        console.log(res)
+        this.$message({
+          type: 'success',
+          message: 'Successfully updated config!'
+        })
       }).catch(error => {
-        console.log(error)
+        this.$message.error(error)
       })
     }
   }
