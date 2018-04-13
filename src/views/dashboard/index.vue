@@ -3,7 +3,7 @@
     <div class="dashboard-text">name:{{name}}</div>
     <div class="dashboard-text">email:{{email}}</div>
     <div class="dashboard-text">site_id:{{site_id}}</div>
-    <!-- <div class="dashboard-text">roles:<span v-for='role in roles' :key='role'>{{role}}</span></div> -->
+    <a :href="'https://site.headr.io/' + site_id">Visit My Site</a>
   </div>
 </template>
 
@@ -13,7 +13,6 @@ export default {
   name: 'dashboard',
   computed: {
     ...mapGetters([
-      // 'roles',
       'name',
       'email',
       'site_id'
