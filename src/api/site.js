@@ -36,10 +36,17 @@ export function getSiteConfig(site_id) {
 
 export function updateSiteConfig(site_id, config) {
   return request({
-    url: 'sitemgr/sites/config/' + site_id,
+    url: '/sitemgr/sites/config/' + site_id,
     method: 'put',
     data: {
       config
     }
+  })
+}
+
+export function getThemes(site_id) {
+  return request({
+    url: '/sitemgr/sites/themes/?site_id=' + site_id,
+    method: 'get'
   })
 }
