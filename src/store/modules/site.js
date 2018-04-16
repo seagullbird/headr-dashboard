@@ -1,4 +1,4 @@
-import { getSiteConfig, updateSiteConfig, getThemes } from '@/api/site'
+import { getSiteConfig, updateSiteConfig, getThemes, updateTheme } from '@/api/site'
 
 const content = {
   state: {
@@ -28,6 +28,15 @@ const content = {
       return new Promise((resolve, reject) => {
         getThemes(site_id).then(res => {
           resolve(JSON.parse(res.data.themes))
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
+    UpdateTheme({ commit, state }, params) {
+      return new Promise((resolve, reject) => {
+        updateTheme(params.site_id, params.theme).then(res => {
+          resolve(res)
         }).catch(error => {
           reject(error)
         })

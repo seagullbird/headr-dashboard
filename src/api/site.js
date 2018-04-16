@@ -50,3 +50,12 @@ export function getThemes(site_id) {
     method: 'get'
   })
 }
+export function updateTheme(site_id, theme) {
+  return request({
+    url: '/sitemgr/sites/' + site_id,
+    method: 'patch',
+    data: {
+      theme
+    }
+  })
+}

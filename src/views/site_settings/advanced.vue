@@ -30,6 +30,7 @@ export default {
   },
   methods: {
     handleSaveConfig() {
+      this.$message('Saving configuration...')
       this.$store.dispatch('UpdateSiteConfig', { site_id: this.$store.getters.site_id, config: this.value }).then(res => {
         this.$message({
           type: 'success',
