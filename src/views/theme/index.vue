@@ -40,7 +40,7 @@
         this.$store.dispatch('UpdateTheme', { site_id: this.$store.getters.site_id, theme: theme }).then(res => {
           this.$message({
             type: 'success',
-            message: 'Successfully updated config!'
+            message: 'Successfully changed site theme!'
           })
         }).catch(error => {
           this.$message.error(error)
