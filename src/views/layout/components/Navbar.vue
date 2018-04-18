@@ -4,7 +4,7 @@
     <breadcrumb class="breadcrumb-container"></breadcrumb>
     <div class="right-menu">
       <a :href="'https://site.headr.io/' + site_id" target="_blank">
-        <el-button type="success" icon="el-icon-news" class="open-mysite right-menu-item">Open My Site</el-button>
+        <el-button type="success" icon="el-icon-news" class="open-mysite right-menu-item" size="small" round>Open My Site</el-button>
       </a>
       <el-dropdown class="avatar-container right-menu-item" trigger="click">
         <div class="avatar-wrapper">
@@ -81,7 +81,8 @@ export default {
       margin: 0 8px;
     }
     .open-mysite {
-      vertical-align: 15px;
+      vertical-align: 16px;
+      margin-right: 20px;
     }
     .avatar-container {
       height: 50px;
