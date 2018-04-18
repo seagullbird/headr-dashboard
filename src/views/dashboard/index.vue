@@ -1,10 +1,30 @@
 <template>
   <div class="dashboard-container">
-    <div class="dashboard-text">name:{{name}}</div>
-    <div class="dashboard-text">email:{{email}}</div>
-    <div class="dashboard-text">site_id:{{site_id}}</div>
-    <MarkdownEditor id="simplemde" placeholder="input about here..." v-model="about"></MarkdownEditor>
-    <el-button type="primary" @click="handleUpdateAbout">Update About</el-button>
+    <el-row :gutter="100">
+      <el-col :span="16">
+        <div>
+          <MarkdownEditor id="simplemde" placeholder="Describe yourself" v-model="about"></MarkdownEditor>
+          <div class="tip">
+            Tip: Content you edit here will be shown in the "About Me" page.
+          </div>
+          <div class="update-button">
+            <el-button type="primary" @click="handleUpdateAbout">Update About</el-button>
+          </div>
+        </div>
+      </el-col>
+      <el-col :span="6">
+        <div>
+          <img :src="avatar" class="image">
+          <div class="profile-name">{{name}}</div>
+          <div style="text-align: center;">
+            <i class="el-icon-message"></i>
+            <a class="profile-email" :href="'mailto:' + email">{{email}}</a>
+          </div>
+        </div>
+      </el-col>
+      <el-col :span="2">
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -24,7 +44,8 @@ export default {
     ...mapGetters([
       'name',
       'email',
-      'site_id'
+      'site_id',
+      'avatar'
     ])
   },
   methods: {
@@ -54,14 +75,36 @@ export default {
 }
 </script>
 
-<style rel="stylesheet/scss" lang="scss" scoped>
-.dashboard {
-  &-container {
+<style scoped>
+.dashboard-container {
     margin: 30px;
-  }
-  &-text {
-    font-size: 30px;
-    line-height: 46px;
-  }
+    padding: 20px;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  margin-bottom: 20px;
+}
+
+.profile-name {
+  margin-bottom: 10px;
+  text-align: center;
+  font-size: 30px;
+}
+
+.profile-email {
+  color: #0366d6;
+}
+
+.update-button {
+  margin-top: 20px;
+  float: right;
+}
+
+.tip {
+  font-size: 15px;
+  float: left;
+  margin-top: 20px;
 }
 </style>
