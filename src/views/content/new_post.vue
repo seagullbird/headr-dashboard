@@ -156,7 +156,7 @@
             title: this.contentForm.title,
             summary: this.contentForm.summary,
             content: this.contentForm.content,
-            tags: JSON.stringify(this.metadataForm.tags),
+            tags: this.metadataForm.tags.join(' '),
             draft: this.publishForm.draft,
             date: new Moment(this.publishForm.date).format()
           }

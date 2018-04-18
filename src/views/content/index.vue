@@ -172,7 +172,7 @@
               title: this.form.title,
               summary: this.form.summary,
               content: this.form.content,
-              tags: JSON.stringify(this.form.tags),
+              tags: this.form.tags.join(' '),
               date: new Moment(this.form.date).format(),
               draft: this.form.draft,
               site_id: Number(this.$store.getters.site_id)
