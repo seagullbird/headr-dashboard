@@ -3,9 +3,6 @@
     <div class="dashboard-text">name:{{name}}</div>
     <div class="dashboard-text">email:{{email}}</div>
     <div class="dashboard-text">site_id:{{site_id}}</div>
-    <a :href="'https://site.headr.io/' + site_id" target="_blank">
-      <el-button type="success" icon="el-icon-news">Open My Site</el-button>
-    </a>
     <MarkdownEditor id="simplemde" placeholder="input about here..." v-model="about"></MarkdownEditor>
     <el-button type="primary" @click="handleUpdateAbout">Update About</el-button>
   </div>

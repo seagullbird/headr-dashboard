@@ -1,23 +1,23 @@
 <template>
   <el-menu class="navbar" mode="horizontal">
     <hamburger class="hamburger-container" :toggleClick="toggleSideBar" :isActive="sidebar.opened"></hamburger>
-    <breadcrumb></breadcrumb>
-    <el-dropdown class="avatar-container" trigger="click">
-      <div class="avatar-wrapper">
-        <img class="user-avatar" :src="avatar">
-        <i class="el-icon-caret-bottom"></i>
-      </div>
-      <el-dropdown-menu class="user-dropdown" slot="dropdown">
-        <!-- <router-link class="inlineBlock" to="/">
+    <breadcrumb class="breadcrumb-container"></breadcrumb>
+    <div class="right-menu">
+      <a :href="'https://site.headr.io/' + site_id" target="_blank">
+        <el-button type="success" icon="el-icon-news" class="open-mysite right-menu-item">Open My Site</el-button>
+      </a>
+      <el-dropdown class="avatar-container right-menu-item" trigger="click">
+        <div class="avatar-wrapper">
+          <img class="user-avatar" :src="avatar">
+          <i class="el-icon-caret-bottom"></i>
+        </div>
+        <el-dropdown-menu class="user-dropdown" slot="dropdown">
           <el-dropdown-item>
-            Profile
+            <span @click="logout" style="display:block;">LogOut</span>
           </el-dropdown-item>
-        </router-link> -->
-        <el-dropdown-item>
-          <span @click="logout" style="display:block;">LogOut</span>
-        </el-dropdown-item>
-      </el-dropdown-menu>
-    </el-dropdown>
+        </el-dropdown-menu>
+      </el-dropdown>
+    </div>
   </el-menu>
 </template>
 
@@ -61,31 +61,46 @@ export default {
     float: left;
     padding: 0 10px;
   }
+  .breadcrumb-container{
+    float: left;
+  }
   .screenfull {
     position: absolute;
     right: 90px;
     top: 16px;
     color: red;
   }
-  .avatar-container {
-    height: 50px;
-    display: inline-block;
-    position: absolute;
-    right: 35px;
-    .avatar-wrapper {
-      cursor: pointer;
-      margin-top: 5px;
-      position: relative;
-      .user-avatar {
-        width: 40px;
-        height: 40px;
-        border-radius: 10px;
-      }
-      .el-icon-caret-bottom {
-        position: absolute;
-        right: -20px;
-        top: 25px;
-        font-size: 12px;
+  .right-menu {
+    float: right;
+    height: 100%;
+    &:focus{
+     outline: none;
+    }
+    .right-menu-item {
+      display: inline-block;
+      margin: 0 8px;
+    }
+    .open-mysite {
+      vertical-align: 15px;
+    }
+    .avatar-container {
+      height: 50px;
+      margin-right: 30px;
+      .avatar-wrapper {
+        cursor: pointer;
+        margin-top: 5px;
+        position: relative;
+        .user-avatar {
+          width: 40px;
+          height: 40px;
+          border-radius: 10px;
+        }
+        .el-icon-caret-bottom {
+          position: absolute;
+          right: -20px;
+          top: 25px;
+          font-size: 12px;
+        }
       }
     }
   }
