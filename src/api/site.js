@@ -70,3 +70,10 @@ export function updateAbout(site_id, content) {
     }
   })
 }
+
+export function getAbout(site_id) {
+  return request({
+    url: '/sitemgr/sites/about/' + site_id,
+    method: 'get'
+  })
+}

@@ -43,6 +43,13 @@ export default {
         this.$message.error(error)
       })
     }
+  },
+  mounted() {
+    this.$store.dispatch('GetAbout', this.$store.getters.site_id).then(res => {
+      this.about = res
+    }).catch(error => {
+      this.$message.error(error)
+    })
   }
 }
 </script>
