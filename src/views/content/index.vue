@@ -131,6 +131,7 @@
           }
           for (let i = 0; i < post_ids.length; i++) {
             this.$store.dispatch('GetPost', post_ids[i]).then(post => {
+              post.ID = post_ids[i]
               this.posts.push(post)
               this.posts_menu.push({
                 id: post.ID,
