@@ -121,7 +121,7 @@
         this.form.draft = this.selected_post.draft
         this.form.summary = this.selected_post.summary
         this.form.date = this.selected_post.date
-        this.form.tags = JSON.parse(this.selected_post.tags)
+        this.form.tags = this.selected_post.tags
       },
       getPosts() {
         this.$store.dispatch('GetAllPosts').then(post_ids => {
