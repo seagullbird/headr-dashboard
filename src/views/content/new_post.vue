@@ -149,6 +149,7 @@
         })
         if (!allValid) return
 
+        this.$message('Publishing...')
         this.$store.dispatch('NewPost', {
           site_id: Number(this.$store.getters.site_id),
           post: {
