@@ -22,20 +22,20 @@ import Layout from '../views/layout/Layout'
   }
 **/
 export const constantRouterMap = [
+  { path: '/', redirect: '/dashboard', hidden: true },
   { path: '/login', component: () => import('@/auth/components/Login/index'), hidden: true },
   { path: '/callback', component: () => import('@/auth/components/Callback/index'), hidden: true },
   { path: '/new_site', component: () => import('@/views/new_site/index'), hidden: true },
   { path: '/404', component: () => import('@/views/404'), hidden: true },
 
   {
-    path: '/',
+    path: '/dashboard',
     component: Layout,
-    redirect: '/dashboard',
     name: 'Dashboard',
-    hidden: true,
     children: [{
-      path: 'dashboard',
-      component: () => import('@/views/dashboard/index')
+      path: '',
+      component: () => import('@/views/dashboard/index'),
+      meta: { title: 'Dashboard', icon: 'dashboard' }
     }]
   },
 
@@ -67,7 +67,6 @@ export const constantRouterMap = [
   {
     path: '/settings',
     component: Layout,
-    redirect: '/settings/theme',
     name: 'Settings',
     meta: { title: 'Settings', icon: 'example' },
     children: [
