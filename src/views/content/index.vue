@@ -151,12 +151,16 @@
           cancelButtonText: 'Cancel',
           type: 'warning'
         }).then(() => {
+          this.$message('Deleting post...')
           this.$store.dispatch('DeletePost', this.selected_post.ID).then(res => {
-            if (res.data !== {}) {
+            if (res.data.id !== 0) {
               this.$message({
                 type: 'success',
                 message: 'Successfully deleted!'
               })
+              this.posts_menu.splice(this.posts_menu.findIndex(item => item.id === res.data.id), 1)
+              this.posts.splice(this.posts_menu.findIndex(item => item.ID === res.data.id), 1)
+              if (this.posts_menu.length === 0) this.tree_empty_text = 'No posts yet'
             } else {
               this.$message.error(res.data.error)
             }
@@ -168,6 +172,7 @@
       handlePublish() {
         this.$refs.form.validate(valid => {
           if (valid) {
+            this.$message('Publishing post...')
             this.$store.dispatch('PatchPost', {
               id: this.selected_post.ID,
               title: this.form.title,
