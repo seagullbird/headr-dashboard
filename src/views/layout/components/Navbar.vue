@@ -34,7 +34,8 @@ export default {
   computed: {
     ...mapGetters([
       'sidebar',
-      'avatar'
+      'avatar',
+      'site_id'
     ])
   },
   methods: {
