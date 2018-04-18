@@ -17,6 +17,8 @@ const content = {
     GetPost({ commit, state }, post_id) {
       return new Promise((resolve, reject) => {
         getPost(post_id).then(res => {
+          // deal with tags
+          res.data.tags = res.data.tags.split(' ')
           resolve(res.data)
         }).catch(error => {
           reject(error)

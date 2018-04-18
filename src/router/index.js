@@ -31,7 +31,6 @@ export const constantRouterMap = [
   {
     path: '/dashboard',
     component: Layout,
-    name: 'Dashboard',
     children: [{
       path: '',
       component: () => import('@/views/dashboard/index'),
