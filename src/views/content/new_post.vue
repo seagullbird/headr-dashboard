@@ -168,10 +168,18 @@
               type: 'success',
               message: 'Successfully published!'
             })
+            this.clearAll()
           }
         }).catch(error => {
           this.$message.error(error)
         })
+      },
+      clearAll() {
+        this.contentForm.title = ''
+        this.contentForm.summary = ''
+        this.contentForm.content = ''
+        this.publishForm.date = ''
+        this.metadataForm.tags = []
       }
     }
   }
