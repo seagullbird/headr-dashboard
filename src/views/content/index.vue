@@ -158,6 +158,14 @@
               this.posts_menu.splice(this.posts_menu.findIndex(item => item.id === res.data.id), 1)
               this.posts.splice(this.posts_menu.findIndex(item => item.ID === res.data.id), 1)
               if (this.posts_menu.length === 0) this.tree_empty_text = 'No posts yet'
+              // clear fields
+              this.form.title = ''
+              this.form.ID = 0
+              this.form.draft = false
+              this.form.summary = ''
+              this.form.content = ''
+              this.form.date = ''
+              this.form.tags = []
             } else {
               this.$message.error(res.data.error)
             }
