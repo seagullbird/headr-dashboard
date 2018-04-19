@@ -156,7 +156,7 @@
                 message: 'Successfully deleted!'
               })
               this.posts_menu.splice(this.posts_menu.findIndex(item => item.id === res.data.id), 1)
-              this.posts.splice(this.posts_menu.findIndex(item => item.ID === res.data.id), 1)
+              this.posts.splice(this.posts.findIndex(item => item.ID === res.data.id), 1)
               if (this.posts_menu.length === 0) this.tree_empty_text = 'No posts yet'
               // clear fields
               this.form.title = ''
