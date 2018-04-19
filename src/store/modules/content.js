@@ -18,7 +18,8 @@ const content = {
       return new Promise((resolve, reject) => {
         getPost(post_id).then(res => {
           // deal with tags
-          res.data.tags = res.data.tags.split(' ')
+          if (res.data.tags.length !== 0) res.data.tags = res.data.tags.split(' ')
+          else res.data.tags = []
           resolve(res.data)
         }).catch(error => {
           reject(error)

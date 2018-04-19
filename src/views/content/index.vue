@@ -18,7 +18,7 @@
       <el-main>
         <el-tabs tab-position="right">
           <el-tab-pane label="Edit">
-            <MarkdownEditor id="simplemde" v-model="selected_post.content"></MarkdownEditor>
+            <MarkdownEditor id="simplemde" v-model="form.content"></MarkdownEditor>
           </el-tab-pane>
           <el-tab-pane label="Config">
             <el-form :rules="formRules" ref="form" :model="form" label-width="80px">
@@ -111,17 +111,14 @@
         this.form.tagInputValue = ''
       },
       handleNodeClick(data) {
-        for (let i = 0; i < this.posts.length; i++) {
-          if (this.posts[i].ID === data.id) {
-            this.selected_post = this.posts[i]
-            break
-          }
-        }
-        this.form.title = this.selected_post.title
-        this.form.draft = this.selected_post.draft
-        this.form.summary = this.selected_post.summary
-        this.form.date = this.selected_post.date
-        this.form.tags = this.selected_post.tags
+        var idx = this.posts.findIndex(item => item.ID === data.id)
+        this.form.title = this.posts[idx].title
+        this.form.ID = this.posts[idx].ID
+        this.form.draft = this.posts[idx].draft
+        this.form.summary = this.posts[idx].summary
+        this.form.content = this.posts[idx].content
+        this.form.date = this.posts[idx].date
+        this.form.tags = this.posts[idx].tags
       },
       getPosts() {
         this.$store.dispatch('GetAllPosts').then(post_ids => {
@@ -152,7 +149,7 @@
           type: 'warning'
         }).then(() => {
           this.$message('Deleting post...')
-          this.$store.dispatch('DeletePost', this.selected_post.ID).then(res => {
+          this.$store.dispatch('DeletePost', this.form.ID).then(res => {
             if (res.data.id !== 0) {
               this.$message({
                 type: 'success',
@@ -174,7 +171,7 @@
           if (valid) {
             this.$message('Publishing post...')
             this.$store.dispatch('PatchPost', {
-              id: this.selected_post.ID,
+              id: this.form.ID,
               title: this.form.title,
               summary: this.form.summary,
               content: this.form.content,
@@ -187,6 +184,13 @@
                 type: 'success',
                 message: 'Successfully published!'
               })
+              var idx = this.posts.findIndex(item => item.ID === this.form.ID)
+              this.posts[idx].title = this.form.title
+              this.posts[idx].draft = this.form.draft
+              this.posts[idx].summary = this.form.summary
+              this.posts[idx].content = this.form.content
+              this.posts[idx].date = this.form.date
+              this.posts[idx].tags = this.form.tags
             }).catch(error => {
               this.$message.error(error)
             })
@@ -200,11 +204,13 @@
     data() {
       return {
         form: {
+          ID: 0,
           title: '',
           draft: true,
-          tags: ['1', '2'],
+          tags: [],
           summary: '',
           date: '',
+          content: '',
           tagInputVisible: false,
           tagtagInputValue: ''
         },
@@ -216,7 +222,6 @@
         post_ids: [],
         posts: [],
         tree_empty_text: 'loading...',
-        selected_post: {},
         tabPosition: 'top',
         filterText: '',
         defaultProps: {
