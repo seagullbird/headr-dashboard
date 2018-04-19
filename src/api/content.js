@@ -20,6 +20,7 @@ export function newPost(site_id, post) {
     method: 'post',
     data: {
       site_id: site_id,
+      draft: post.draft,
       title: post.title,
       date: post.date,
       content: post.content,
